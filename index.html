@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Fundamentals of Business by Michael Scott</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,500;0,700;1,500&family=Caveat:wght@500&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg1:#E3E8F2;--bg2:#AEB8CE;--tool:#14213D;--btn:#14213D;--btnink:#F4F6F8;--gold:#8A6612}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg1:#16224A;--bg2:#070C1C;--tool:#C9D0E0;--btn:#D4AF4A;--btnink:#0F1B3D;--gold:#D4AF4A}}
+:root[data-theme="dark"]{--bg1:#16224A;--bg2:#070C1C;--tool:#C9D0E0;--btn:#D4AF4A;--btnink:#0F1B3D;--gold:#D4AF4A}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;height:100%;display:flex;flex-direction:column;overflow:hidden;color:var(--tool);font-family:"Newsreader",Georgia,serif;background:radial-gradient(ellipse at 50% 35%,var(--bg1),var(--bg2) 80%)}
+#gl{flex:1;min-height:0;position:relative;touch-action:pan-y;cursor:grab}
+#gl canvas{display:block;width:100%;height:100%}
+.bar{flex:none;display:flex;align-items:center;justify-content:center;gap:.8rem;padding:.6rem 1rem .9rem;flex-wrap:wrap}
+button{font:inherit;cursor:pointer;background:var(--btn);color:var(--btnink);border:0;border-radius:3px;padding:.55rem 1.1rem;font-size:.95rem}
+button:disabled{opacity:.35;cursor:default}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.mid{min-width:10rem;text-align:center;font-size:.9rem}
+.trk{height:3px;background:rgba(127,127,127,.35);margin-top:.35rem;border-radius:2px;overflow:hidden}
+.trk i{display:block;height:100%;width:0;background:var(--gold)}
+.hint{position:absolute;left:0;right:0;top:.6rem;text-align:center;font-size:.85rem;opacity:.7;pointer-events:none}
+</style>
+</head>
+<body>
+<div id="gl"><div class="hint">Drag a page, click either side, or use the arrow keys. Landscape works best on a phone.</div></div>
+<div class="bar">
+  <button id="prev">Previous</button>
+  <div class="mid"><div id="lab">Cover</div><div class="trk"><i id="fill"></i></div></div>
+  <button id="toc">Contents</button>
+  <button id="next">Next</button>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* HOW TO ADD CONTENT
+   Everything below is data. To add a chapter, replace a { soon:1 } entry with { t:'Title', pages:[ [blocks], [blocks] ] }.
+   To open a new season, replace a season's soon:1 with chapters:[...]. Contents, page numbers and the back cover update themselves.
+   Blocks: k kicker, h1, h2, p, c centered, m maxim [title,text], w warning, note handwritten, sp spacer. */
+var BOOK={seasons:[
+ {no:1,title:'Be the Boss, Be the Friend',epigraph:'In which a regional manager explains leadership to people who did not ask.',chapters:[
+  {t:'Would I Rather Be Feared or Loved?',pages:[
+   [['p',`Webster's Dictionary defines leadership as: when a person leads a group of other persons, like a goose. I have since looked it up and it said something else. I stand by Webster's first draft.`],['p',`Which brings us to the question that has haunted every great leader in history. Is it better to be feared, or loved? Machiavelli said feared. With respect, Machiavelli never ran a Fun Run.`],['p',`The correct answer is both. I want people to be afraid of how much they love me. And if you cannot be both, be both.`]],
+   [['p',`I learned this on a Tuesday. A new hire shook my hand and said, "Mr. Scott, I have heard a lot about you." I said, "All of it true." He said, "Some of it was concerning."`],['p',`Now I had his full attention. A boss with attention is a boss with power. And power, used correctly, is just friendship with a lanyard.`],['p',`As they say, a boss in the hand is worth two in the bush. Nobody has ever said that. I said it just now, and it landed.`],['m',`Michael's Maxim`,`A good boss is like a good pizza. Everyone is happy when he shows up, and if he is late, people are upset.`],['note',`Learn his name. Check lanyard.`]],
+   [['h2',`The day I fired nobody`],['p',`One morning I decided to fire somebody, because I read that real bosses do that. I called everyone into the conference room and said, "Someone in this room is about to be let go." Nobody breathed. It was the most powerful moment of my career.`],['p',`Then I said, "Just kidding. I love you all," and they clapped. Toby asked if that was allowed. I said, "Toby, I have declared it allowed." That is how declaring works.`],['w',`Do not try this at home. If you are not me, you will be sued. If you are me, you will also be sued, but with style.`]],
+   [['h2',`The part where I stop doing a bit`],['p',`When I say family, I am not joking. I have a lot of ideas about how to get people to like me. Some are bad. I know that.`],['p',`Pam had an art show once, and not many people came. I went. I bought a painting of our building, and I hung it where everyone could see it. Nobody asked me to.`],['p',`I ask for love too much. I know that. I am working on it. Anyway. Do not tell Toby I said so.`],['note',`Hug count this week: 4`]],
+   [['h2',`What to take away`],['p',`First, be loved. It is better than being feared, and cheaper than being rich.`],['p',`Second, be feared a little. About the amount you feel when a fire drill might not be a drill.`],['p',`Third, never, under any circumstances, for any reason, at any time, to anyone, say "I'm not a boss, I'm a friend" in front of Corporate. They take notes.`],['m',`Review questions`,`1. Feared or loved? 2. Greatest boss in history? 3. What is on the mug? Answers: Both. Me. World's Best Boss.`]]]},
+  {t:'How to Run a Meeting',pages:[
+   [['p',`A meeting is theater with a table. Have an agenda. Mine is whatever I am excited about on the way in.`],['p',`Open with a character. I have used Date Mike, Prison Mike, and Michael Scarn, Secret Agent. Prison Mike is for discipline. Date Mike is for morale.`],['p',`As they say, the early bird gets the worm, but the second mouse gets the cheese. I am the early bird. I am also the second mouse. I contain both.`]],
+   [['p',`Toby may attend. Toby may not speak. If he must speak, he can write it down and give it to someone who will lose it.`],['p',`Never end on a number. End on a hug, or a snack.`],['m',`Michael's Maxim`,`Could this have been an email? Yes. It could also have been a hug.`],['w',`Do not try this at home. I once called a meeting to announce there would be no more meetings. It ran forty minutes.`]]]},
+  {t:'Hiring, Firing, and Why You Should Never Do Either on a Friday',soon:1}]},
+ {no:2,title:'Sales Is an Art, and I Am Picasso',soon:1}
+]};
+var TOCN=3;
+var F=(function(){
+ var entries=0;BOOK.seasons.forEach(function(s){entries++;if(!s.soon)entries+=s.chapters.length});
+ var tocPages=Math.ceil(entries/11),start=6+tocPages,body=[],toc=[],cn=0;
+ BOOK.seasons.forEach(function(s){var tag='Season '+s.no;
+  if(s.soon){toc.push(['t',tag+': '+s.title,'Soon','sg']);return}
+  toc.push(['t',tag+': '+s.title,'','s']);
+  body.push({nn:1,tag:tag,b:[['sp',330],['c',tag,'h2'],['c',s.title,'h1'],['sp',30],['c',s.epigraph||'','s']]});
+  s.chapters.forEach(function(ch){cn++;
+   if(ch.soon){toc.push(['t',cn+'. '+ch.t,'Soon','g',30]);return}
+   toc.push(['t',cn+'. '+ch.t,String(start+body.length-1),'',30]);
+   ch.pages.forEach(function(p,i){body.push({tag:tag,b:i?p:[['k',tag+', Chapter '+cn],['h1',ch.t]].concat(p)})})})});
+ var tp=[];for(var i=0;i<tocPages;i++)tp.push({nn:1,b:(i?[]:[['h1','Contents'],['sp',10]]).concat(toc.slice(i*11,i*11+11))});
+ var front=[{hard:'cover'},{hard:'end'},
+  {nn:1,b:[['sp',200],['c',`The Fundamentals of Business`,'h1'],['c',`by Michael Scott`],['c',`World's Best Boss, mug certified`],['sp',140],['c',`Dunder Mifflin Press, Scranton, Pennsylvania. Not affiliated with Corporate. Corporate has been informed.`,'s']]},
+  {nn:1,b:[['p',`Copyright Michael Gary Scott. No part of this book may be copied, or described to a friend in a way that sounds better than the book. Printed on Dunder Mifflin paper, because I believe in my product.`,'s'],['sp',150],['c',`Dedication`,'h2'],['c',`For my employees, who are not my employees. They are my family.`],['c',`And for Toby, who is not my family. He is HR.`]]},
+  {b:[['h1',`Foreword`],['p',`Webster's Dictionary defines foreword as: the word that comes before the other words. That is exactly what this is, and it is already doing a great job.`],['p',`I begin with a quote, because every serious book does. Wayne Gretzky said, "You miss 100 percent of the shots you don't take." Michael Scott.`],['p',`That second part is me. I said it right after, and in my heart I said it first.`],['p',`This book contains everything I know about business. It will take you a weekend to read and forty years to understand. That is how long it took me.`]]},
+  {b:[['p',`People ask why I wrote it. A boss is a teacher, a father, a clown, and a very close friend. Usually in that order, and sometimes all in one meeting.`],['p',`Some of what follows you will disagree with. Those parts are the most important, so read them twice.`],['p',`Someone told me a book like this already exists. I asked, "Does it have a mug?" It does not have a mug.`],['p',`Sometimes I start a sentence without knowing how it ends. I trust myself to find the ending. In this book I did, usually on the next page.`],['note',`Pam, proofread. Be gentle.`]]}];
+ var end=[{nn:1,b:[['sp',260],['c',`To be continued`,'h1'],['c',`More chapters and new seasons will be added here as they are released.`],['note',`Season 2 is in production. Dwight says it is not.`]]}];
+ var out=front.concat(tp,body,end);if((out.length+1)%2)out.push({nn:1,b:[['sp',200],['c',`Notes`,'h2'],['c',`Space for your thoughts. I will be checking.`,'s']]});out.push({hard:'back'});
+ out.forEach(function(f,i){if(!f.hard&&!f.nn)f.n=String(i-1)});return out})();
+var W=1024,H=1422,PW=3.6,PH=PW*H/W,L=F.length/2,EPS=.032,N=36,leaves=[],GX=0,gx=0;
+function wrap(x,t,mw){var w=t.split(' '),l=[],c='';w.forEach(function(s){var q=c?c+' '+s:s;if(x.measureText(q).width>mw&&c){l.push(c);c=s}else c=q});l.push(c);return l}
+function paper(x,f,i){
+ var L1=i%2,ml=L1?100:150,mr=L1?150:100,mw=W-ml-mr,note=null,lim=H-170,sc=1,y,P=function(v){return Math.round(v*sc)};
+ f.b.forEach(function(b){if(b[0]==='note'){note=b[1];lim=H-370}});
+ for(;;){x.fillStyle='#F4F6F8';x.fillRect(0,0,W,H);y=170;
+  f.b.forEach(function(b){var t=b[0],s=b[2]==='s',ct=t==='c';if(t==='note')return;if(t==='sp'){y+=P(b[1]);return}
+   x.textAlign=ct?'center':'left';var cx=ct?ml+mw/2:ml,fn,lh,col='#1B2233',gap=22;
+   if(t==='t'){var fl=b[3]||'',sh=fl[0]==='s';if(sh)y+=P(14);x.font=sh?'500 '+P(38)+'px "Bodoni Moda"':P(34)+'px Newsreader';x.fillStyle=sh?'#8A6612':(fl==='g'?'#8791A5':'#1B2233');x.textAlign='left';var tl=wrap(x,b[1],mw-P(150)-(b[4]||0));tl.forEach(function(q,k){x.fillText(q,ml+(b[4]||0),y+k*P(40))});x.textAlign='right';x.font='italic '+P(30)+'px Newsreader';x.fillText(b[2],W-mr,y);y+=(tl.length-1)*P(40)+P(62);return}
+   if(t==='m'||t==='w'){var tx=t==='m'?b[2]:b[1],pad=P(26),it=t==='m'?'italic ':'';x.font=it+P(34)+'px Newsreader';var ls=wrap(x,tx,mw-pad*2-10),hh=ls.length*P(50)+pad*2+(t==='m'?P(46):0);
+    if(t==='m'){x.fillStyle='rgba(31,58,147,.08)';x.fillRect(ml,y,mw,hh);x.fillStyle='#8A6612';x.fillRect(ml,y,6,hh)}else{x.strokeStyle='#667085';x.lineWidth=3;x.setLineDash([12,9]);x.strokeRect(ml,y,mw,hh);x.setLineDash([])}
+    var yy=y+pad+P(30);x.textAlign='left';if(t==='m'){x.font='500 '+P(30)+'px "Bodoni Moda"';x.fillStyle='#8A6612';x.fillText(b[1],ml+pad+6,yy);yy+=P(46)}
+    x.font=it+P(34)+'px Newsreader';x.fillStyle='#1B2233';ls.forEach(function(q,k){x.fillText(q,ml+pad+6,yy+k*P(50))});y+=hh+P(30);return}
+   if(t==='k'){fn='italic '+P(32)+'px Newsreader';lh=P(44);col='#8A6612';gap=4}
+   else if(t==='h1'||b[2]==='h1'){if(y>170)y+=P(52);fn='700 '+P(74)+'px "Bodoni Moda"';lh=P(80);gap=18}
+   else if(t==='h2'||b[2]==='h2'){if(y>170)y+=P(30);fn='500 '+P(50)+'px "Bodoni Moda"';lh=P(60);gap=18}
+   else{fn=P(s?28:35)+'px Newsreader';lh=P(s?42:54)}
+   x.font=fn;x.fillStyle=col;wrap(x,b[1],mw).forEach(function(q){x.fillText(q,cx,y);y+=lh});y+=P(gap)});
+  if(y<=lim+P(20)||sc<.6)break;sc-=.04}
+ (window.FIT=window.FIT||{})[i]=[+sc.toFixed(2),Math.round(y)];
+ if(note){x.save();x.translate(W-mr-10,H-250);x.rotate(-.05);x.textAlign='right';x.font='500 52px Caveat';x.fillStyle='#1F3A93';wrap(x,note,420).forEach(function(q,k){x.fillText(q,0,k*56)});x.restore()}
+ for(var k=0;k<2200;k++){x.fillStyle='rgba(60,70,90,'+Math.random()*.035+')';x.fillRect(Math.random()*W,Math.random()*H,2,2)}
+ if(f.n){x.font='28px Newsreader';x.fillStyle='#667085';x.textAlign=L1?'left':'right';x.fillText(f.n,L1?ml:W-mr,H-80)}
+ var g2=L1?x.createLinearGradient(W,0,W-130,0):x.createLinearGradient(0,0,130,0);g2.addColorStop(0,'rgba(0,0,0,.28)');g2.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g2;x.fillRect(0,0,W,H)}
+function tex(i){var c=document.createElement('canvas');c.width=W;c.height=H;var x=c.getContext('2d'),f=F[i];
+ if(f.hard){var g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,'#16285A');g.addColorStop(1,'#0A1331');x.fillStyle=g;x.fillRect(0,0,W,H);
+  var gold='#D4AF4A';x.strokeStyle=gold;x.lineWidth=3;x.strokeRect(40,40,W-80,H-80);x.lineWidth=1.5;x.strokeRect(58,58,W-116,H-116);x.fillStyle=gold;x.textAlign='center';
+  function C(t,y,fn,mw){x.font=fn;wrap(x,t,mw||760).forEach(function(s,k){x.fillText(s,W/2,y+k*(parseInt(fn.match(/(\d+)px/)[1])*1.1))})}
+  if(f.hard=='cover'){C('A Michael Scott Production',170,'italic 38px Newsreader');C('The Fundamentals of Business',420,'700 118px "Bodoni Moda"',700);C('Michael Scott',880,'500 60px "Bodoni Moda"');C('Over 1 billion copies sold.',1010,'italic 38px Newsreader');C('More than the Bible.',1060,'italic 38px Newsreader');
+   x.beginPath();x.arc(W/2,1215,80,0,7);x.stroke();C('Certified',1205,'italic 24px Newsreader');C('Bestseller (By Me)',1235,'italic 24px Newsreader',200)}
+  else if(f.hard=='end'){C('Property of Michael Scott.',640,'italic 44px Newsreader');C('If found, return to Michael Scott.',710,'italic 44px Newsreader');C('Reward: a hug. Possibly two.',790,'italic 32px Newsreader')}
+  else{C('"A masterpiece. I could not put it down, and I wrote it."',560,'italic 58px Newsreader',640);C('Michael Scott, about Michael Scott',830,'italic 34px Newsreader');C('$19.99, or best offer',1250,'italic 30px Newsreader')}
+ }else{paper(x,f,i)}
+ var t2=new THREE.CanvasTexture(c);t2.encoding=THREE.sRGBEncoding;t2.anisotropy=8;t2.minFilter=THREE.LinearMipmapLinearFilter;return t2}
+
+var el=document.getElementById('gl'),R=new THREE.WebGLRenderer({antialias:true,alpha:true});
+R.setPixelRatio(Math.min(2,devicePixelRatio));R.outputEncoding=THREE.sRGBEncoding;R.shadowMap.enabled=true;R.shadowMap.type=THREE.PCFSoftShadowMap;el.appendChild(R.domElement);
+var S=new THREE.Scene(),cam=new THREE.PerspectiveCamera(30,1,.1,100),book=new THREE.Group();S.add(book);
+S.add(new THREE.HemisphereLight(0xffffff,0x44506e,.85));
+var dl=new THREE.DirectionalLight(0xfff4e0,.9);dl.position.set(-5,11,6);dl.castShadow=true;dl.shadow.mapSize.set(2048,2048);var sc=dl.shadow.camera;sc.left=-7;sc.right=7;sc.top=7;sc.bottom=-7;sc.near=1;sc.far=30;dl.shadow.bias=-.0006;dl.shadow.normalBias=.015;S.add(dl);
+var gr=new THREE.Mesh(new THREE.PlaneGeometry(40,40),new THREE.ShadowMaterial({opacity:.38}));gr.rotation.x=-Math.PI/2;gr.position.y=-.02;gr.receiveShadow=true;S.add(gr);
+var edge=new THREE.MeshLambertMaterial({color:0xE4E7EE});
+function blk(){var m=new THREE.Mesh(new THREE.BoxGeometry(PW*.995,1,PH*.995),edge);m.castShadow=m.receiveShadow=true;book.add(m);return m}
+var rB=blk(),lB=blk();
+function mat(i,side){var t=tex(i);if(side){t.wrapS=THREE.RepeatWrapping;t.repeat.x=-1;t.offset.x=1}return new THREE.MeshLambertMaterial({map:t,side:side?THREE.BackSide:THREE.FrontSide})}
+function init(){for(var k=0;k<L;k++){var g=new THREE.PlaneGeometry(PW,PH,N,1),a=new THREE.Mesh(g,mat(2*k,0)),b=new THREE.Mesh(g,mat(2*k+1,1));
+  [a,b].forEach(function(m){m.castShadow=m.receiveShadow=true;book.add(m)});leaves.push({g:g,t:0,tg:0,dl:0,k:k,drag:false})}
+ resize();show(0);R.setAnimationLoop(loop)}
+var ease=function(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2};
+function bend(l){var e=ease(l.t),th=e*Math.PI,sn=Math.sin(th),p=l.g.attributes.position,X=0,U=0,dx=PW/N,base=((L-l.k)*(1-e)+(l.k+1)*e)*EPS+.006;
+ for(var c=0;c<=N;c++){var y=U+base;p.setXYZ(c,X,y,-PH/2);p.setXYZ(c+N+1,X,y,PH/2);
+  var s=(c+.5)/N,ph=th+1.05*Math.pow(s,1.4)*(2*e-1)*sn;X+=dx*Math.cos(ph);U+=dx*Math.sin(ph)}
+ p.needsUpdate=true;l.g.computeVertexNormals();l.g.computeBoundingSphere()}
+var last=0,mx=0,my=0,cmx=0,cmy=0;
+function loop(ts){var dt=Math.min(.05,(ts-last)/1000||0);last=ts;var S0=0;
+ leaves.forEach(function(l){if(l.dl>0)l.dl-=dt;else if(!l.drag){var d=l.tg-l.t,st=dt/1.15;l.t=Math.abs(d)<=st?l.tg:l.t+Math.sign(d)*st}
+  var e=ease(l.t);S0+=e;bend(l);var moving=l.t>0&&l.t<1;l.g.userData.m=moving});
+ var rh=Math.max(.001,(L-S0)*EPS),lh=Math.max(.001,S0*EPS);rB.scale.y=rh;rB.position.set(PW/2,rh/2-.002,0);lB.scale.y=lh;lB.position.set(-PW/2,lh/2-.002,0);
+ var n=cnt();GX=n===0?-PW/2:(n===L?PW/2:0);gx+=(GX-gx)*Math.min(1,dt*3.2);book.position.x=gx;
+ cmx+=(mx-cmx)*.05;cmy+=(my-cmy)*.05;var d=camD(),el2=1.08;cam.position.set(cmx*.7,Math.sin(el2)*d+cmy*.4,Math.cos(el2)*d+.3);cam.lookAt(0,0,.3);R.render(S,cam)}
+function camD(){var a=cam.aspect,t=Math.tan(cam.fov*Math.PI/360);return Math.max(PH*1.3/2/t,(PW*2.5)/a/2/t)}
+function resize(){var w=el.clientWidth,h=el.clientHeight;R.setSize(w,h);cam.aspect=w/h;cam.updateProjectionMatrix()}
+addEventListener('resize',resize);
+function cnt(){var n=0;leaves.forEach(function(l){if(l.tg===1)n++});return n}
+function show(){var n=cnt(),lf=2*n-2,rt=2*n-1,c=F.length-3;$('lab').textContent=n===0?'Cover':(n===L?'Back cover':(lf<1?'Page '+rt:(rt>c?'Page '+lf:'Pages '+lf+' and '+rt)));
+ var fa=F[2*n]||{},fb=F[2*n-1]||{},tg=fa.tag||fb.tag;if(tg)$('lab').textContent=tg+', '+$('lab').textContent.toLowerCase();$('fill').style.width=(n/L*100)+'%';$('prev').disabled=n===0;$('next').disabled=n===L}
+function $(i){return document.getElementById(i)}
+function to(t){t=Math.max(0,Math.min(L,t));var n=cnt(),o=0;if(t>n)for(var k=n;k<t;k++){leaves[k].tg=1;leaves[k].dl=(o++)*.09}else for(var k2=n-1;k2>=t;k2--){leaves[k2].tg=0;leaves[k2].dl=(o++)*.09}show()}
+$('next').onclick=function(){to(cnt()+1)};$('prev').onclick=function(){to(cnt()-1)};$('toc').onclick=function(){to(TOCN)};
+addEventListener('keydown',function(e){if(e.key==='ArrowRight')to(cnt()+1);if(e.key==='ArrowLeft')to(cnt()-1)});
+var dr=null;
+el.addEventListener('pointerdown',function(e){var n=cnt(),fw=e.clientX>innerWidth/2;if(fw&&n===L||!fw&&n===0)return;var l=fw?leaves[n]:leaves[n-1];dr={l:l,fw:fw,x:e.clientX,mv:false};l.drag=true;el.setPointerCapture(e.pointerId);el.style.cursor='grabbing'});
+el.addEventListener('pointermove',function(e){var r=el.getBoundingClientRect();mx=((e.clientX-r.left)/r.width-.5)*2;my=((e.clientY-r.top)/r.height-.5)*2;if(!dr)return;var d=e.clientX-dr.x;if(Math.abs(d)>6)dr.mv=true;var u=Math.min(1,Math.abs(d)/(innerWidth*.32));
+ dr.l.t=dr.fw?(d<0?u:0):(d>0?1-u:1)});
+function end(){if(!dr)return;var l=dr.l,n=cnt();l.drag=false;el.style.cursor='';var fwd;if(!dr.mv)fwd=dr.fw;else fwd=l.t>.5;dr=null;
+ l.tg=fwd?1:0;l.dl=0;show()}
+el.addEventListener('pointerup',end);el.addEventListener('pointercancel',end);
+Promise.race([Promise.all(['700 40px "Bodoni Moda"','500 40px "Bodoni Moda"','40px Newsreader','italic 40px Newsreader','500 40px Caveat'].map(function(f){return document.fonts.load(f)})),new Promise(function(r){setTimeout(r,2500)})]).then(init,init);
+</script>
+</body>
+</html>
