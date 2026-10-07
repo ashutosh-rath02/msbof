@@ -1,6 +1,6 @@
 # The Fundamentals of Business by Michael Scott
 
-A page-turning 3D digital book (Three.js, no build step). Season 1 is released.
+A page-turning 3D digital book (Three.js, no build step). Seasons 1 and 2 are released.
 
 ## Run locally
 
